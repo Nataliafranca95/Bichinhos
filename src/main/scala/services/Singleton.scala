@@ -1,26 +1,46 @@
 package main.scala.services
 
-import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
-
-import enums.enumAplication
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.io.Source
 
 private class ManipulatingFile {
-  protected val pathFile: String = "target/historico.txt"
+  protected val pathFile: String = "target/historico.csv"
+  protected val sparkSession = createSparkSession()
 
-  def readFile(): String = {
-    val source = scala.io.Source.fromFile(pathFile)
-    val lines = try source.mkString finally source.close()
-    lines
+  def readFile(): DataFrameme = {
+    val df = sparkSession.read
+      .format("csv")
+      .load("source-path")
+
+    df
   }
 
   def writeFile(value: String): Unit = {
-    val file = new File(pathFile)
-    val bw = new BufferedWriter(new FileWriter(file))
-    bw.write(value)
-    bw.close()
-    print(bw)
+    val dfData:DataFrame= readFile()
+
+    dfData
+      .withColumn(col("animal")===enumAplication.mainAplication.gato, "Gato")
+      .withColumn(col("animal")===enumAplication.mainAplication.cachorro, "Cachorro")
+
+    dfData
+      .writeStream
+      .format("csv")
+      start()
+  }
+
+  def csvSchema = StructType {
+    StructType(Array(
+      StructField("animal", StringType, true)
+    ))
+  }
+
+  private def createSparkSession(): SparkSession = {
+    val sparkSession = SparkSession.builder.
+      master("local")
+      .appName("spark session example")
+      .getOrCreate()
+    sparkSession
   }
 }
 
@@ -36,6 +56,6 @@ object Singleton {
   }
 
   def getHistorico(): String = {
-    manipulatingFile.readFile()
+    println(manipulatingFile.readFile().show())
   }
 }

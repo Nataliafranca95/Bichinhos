@@ -18,4 +18,5 @@ object Main {
     } while (inputTerminal != enumAplication.mainAplication.sair ||
       inputTerminal == enumAplication.mainAplication.historico)
   }
+
 }
