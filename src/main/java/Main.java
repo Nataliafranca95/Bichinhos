@@ -13,7 +13,8 @@ public class Main {
         ManipuladorArquivo instancia = new ManipuladorArquivo();
 
         do {
-            System.out.println("Digite: \n 1 para gato \n 2 para cachorro \n histórico \n sair");
+
+            System.out.println("Digite: \n 1 para gato \n 2 para cachorro \n histórico");
             inputTerminal = JOptionPane.showInputDialog("=>");
 
             switch (inputTerminal) {
@@ -23,9 +24,7 @@ public class Main {
                     instancia.setCachorro();
                 case "histórico":
                     instancia.getHistorico();
-                default:
-                    System.out.println("Tente novamente");
             }
-        } while ((inputTerminal.equals("sair")) || (inputTerminal.equals("histórico")));
+        } while ((!inputTerminal.equals("histórico")));
     }
 }

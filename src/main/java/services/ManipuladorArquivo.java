@@ -13,29 +13,34 @@ public class ManipuladorArquivo {
     }
 
     public void setCachorro() throws IOException {
-        Animal gato = new Gato();
-        BufferedWriter buffWrite = new BufferedWriter(new FileWriter(path));
-        String linha = gato.falar();
-        Scanner in = new Scanner(System.in);
-        linha = in.nextLine();
-        buffWrite.append(linha);
-        buffWrite.close();
+        Animal cachorro = new Cachorro();
+        write(cachorro.falar());
     }
 
     public void setGato() throws IOException {
-        System.out.println("dfdfd");
+        Animal gato = new Cachorro();
+        write(gato.falar());
     }
 
     public void getHistorico() throws IOException {
-        BufferedReader buffRead = new BufferedReader(new FileReader(path));
-        String linha = "";
-        while (true) {
-            if (linha != null) {
-                System.out.println(linha);
-            } else
-                break;
-            linha = buffRead.readLine();
+        FileReader fileReader = new FileReader(path);
+        BufferedReader reader = new BufferedReader(fileReader);
+        String data = null;
+        while ((data = reader.readLine()) != null) {
+            System.out.println(data);
         }
-        buffRead.close();
+        fileReader.close();
+        reader.close();
+    }
+    private void write(String dado){
+        try {
+            FileWriter fw = new FileWriter(path, true);
+            BufferedWriter conexao = new BufferedWriter(fw);
+            conexao.write(dado);
+            conexao.newLine();
+            conexao.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
